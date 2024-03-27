@@ -1,0 +1,25 @@
+{
+    "name": "GPTMorePrompt",
+    "description": "This extension will add dropdowns to the GPT prompt to allow you to select ",
+    "version": "1.0",
+    "permissions": [
+      "activeTab"
+
+    ],
+    "browser_action": {
+
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        
+        "matches": ["*://chat.openai.com/*"],
+        "js" : ["content.js"],
+        "css" : ["content.css"]
+      }
+  
+    ], 
+    "manifest_version": 2
+    
+  }
+  
