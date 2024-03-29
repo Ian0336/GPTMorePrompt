@@ -36,7 +36,7 @@ function makeDropdown() {
   if (document.getElementsByClassName("dropdown dropdown-dark").length != 0)
     return;
   dropdown = document.createElement("div");
-  dropdown.className = "dropdown dropdown-dark";
+  dropdown.className = "dropdown dropdown-dark stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl";
   console.log(dropdown);
 
   var dropdownContent = document.createElement("select");
@@ -52,12 +52,11 @@ function makeDropdown() {
   }
 
   dropdown.appendChild(dropdownContent);
-
-  document
-    .getElementsByClassName(
-      "stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl"
-    )[0]
-    .appendChild(dropdown);
+  let formPosition = document.getElementsByClassName(
+    "w-full pt-2 md:pt-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:w-[calc(100%-.5rem)]"
+  );
+  console.log(formPosition);
+  formPosition[0].insertBefore(dropdown, formPosition[0].childNodes[1]);
 }
 function changeDropdownContent() {
   //delete old options
