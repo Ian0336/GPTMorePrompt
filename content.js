@@ -36,11 +36,11 @@ function makeDropdown() {
   if (document.getElementsByClassName("dropdown dropdown-dark").length != 0)
     return;
   dropdown = document.createElement("div");
-  dropdown.className = "dropdown dropdown-dark stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl";
+  dropdown.className = "dropdown dropdown-dark px-3 text-base md:px-4 m-auto md:px-5 lg:px-1 xl:px-5 mt-1";
   console.log(dropdown);
 
   var dropdownContent = document.createElement("select");
-  dropdownContent.className = "dropdown-select";
+  dropdownContent.className = "dropdown-select mx-auto flex flex-1 gap-3 text-base juice:gap-4 juice:md:gap-6 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem]";
   dropdownContent.name = "two";
   dropdownContent.id = "dropdownContent";
   //add options
@@ -53,7 +53,7 @@ function makeDropdown() {
 
   dropdown.appendChild(dropdownContent);
   let formPosition = document.getElementsByClassName(
-    "w-full pt-2 md:pt-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:w-[calc(100%-.5rem)]"
+    "w-full md:pt-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:w-[calc(100%-.5rem)] juice:w-full"
   );
   console.log(formPosition);
   formPosition[0].insertBefore(dropdown, formPosition[0].childNodes[1]);
