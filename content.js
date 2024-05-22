@@ -85,7 +85,7 @@ function setLocalStorage() {
 var observer = new MutationObserver(function (mutations) {
   mutations.forEach(function (mutation) {
     button = document.getElementsByClassName(
-      "absolute bottom-1.5 right-2 rounded-lg border border-black bg-black p-0.5 text-white transition-colors enabled:bg-black disabled:text-gray-400 disabled:opacity-10 dark:border-white dark:bg-white dark:hover:bg-white md:bottom-2.5 md:right-3"
+      "mb-1 mr-1 flex h-8 w-8 items-center justify-center rounded-full bg-black text-white transition-colors hover:opacity-70 focus-visible:outline-none focus-visible:outline-black disabled:bg-[#D7D7D7] disabled:text-[#f4f4f4] disabled:hover:opacity-100 dark:bg-white dark:text-black dark:focus-visible:outline-white disabled:dark:bg-token-text-quaternary dark:disabled:text-token-main-surface-secondary"
     )[0]; // button的class
     if (button != undefined) {
       button.removeEventListener("click", function () {
