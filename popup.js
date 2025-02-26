@@ -37,20 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
   function handleInputChange(e) {
     const value = e.target.value;
     const inputID = parseInt(e.target.dataset.index);
+    console.log("change here " + value);
 
-    if (value.trim() === "") {
-      if (confirm("Remove this prompt?")) {
-        promptOptions.splice(inputID, 1);
-        renderPrompts();
-        setLocalStorage();
-      } else {
-        // Reset to previous value if user cancels deletion
-        e.target.value = promptOptions[inputID];
-      }
-    } else {
-      promptOptions[inputID] = value;
-      setLocalStorage();
-    }
+    promptOptions[inputID] = value;
+    setLocalStorage();
   }
 
   // Handle delete button clicks
@@ -75,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
       input.className = "input";
       input.value = promptOptions[i];
       input.dataset.index = i;
-      input.addEventListener('change', handleInputChange);
+      input.oninput = handleInputChange;
       
       const deleteBtn = document.createElement("button");
       deleteBtn.className = "delete-btn";
@@ -95,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function setLocalStorage() {
     var tmp = "";
     for (var i = 0; i < promptOptions.toString().length; i++) {
-      if (promptOptions[i] != undefined && i != 0) {
+      if (promptOptions[i] != undefined) {
         tmp += promptOptions[i];
         if (i != promptOptions.toString().length - 1) tmp += ",";
       }
@@ -111,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
     });
     console.log(tmp);
-    
+    localStorage.setItem("promptOptions", tmp);
   }
 
   // Initial render
