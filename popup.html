@@ -5,11 +5,145 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="./popup.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>popup</title>
+    <title>ChatGPT Prompt Manager</title>
+    <style>
+      :root {
+        --primary-color: #333333;
+        --hover-color: #000000;
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --border-color: #e0e0e0;
+        --accent-color: #666666;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #000000;
+          --hover-color: #333333;
+          --bg-color: #121212;
+          --text-color: #ffffff;
+          --border-color: #333333;
+          --accent-color: #888888;
+        }
+      }
+      
+      body {
+        width: 320px;
+        min-height: 300px;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+      }
+      
+      .header {
+        padding: 15px;
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .header h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.5px;
+      }
+      
+      .header p {
+        margin: 5px 0 0;
+        font-size: 12px;
+        opacity: 0.9;
+      }
+      
+      #main {
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      
+      .prompt-item {
+        display: flex;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+      
+      .input {
+        flex-grow: 1;
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: transparent;
+        color: var(--text-color);
+      }
+      
+      .input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+      }
+      
+      .delete-btn {
+        background: none;
+        border: none;
+        color: var(--accent-color);
+        cursor: pointer;
+        margin-left: 8px;
+        font-size: 18px;
+        transition: color 0.2s;
+      }
+      
+      .delete-btn:hover {
+        color: #888;
+      }
+      
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      #addBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        letter-spacing: 0.5px;
+      }
+      
+      #addBtn:hover {
+        background-color: var(--hover-color);
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 20px;
+        color: var(--accent-color);
+        font-style: italic;
+      }
+    </style>
   </head>
   <body>
+    <div class="header">
+      <h1>ChatGPT Prompt Manager</h1>
+      <p>Create and manage your favorite prompts</p>
+    </div>
+    
     <div id="main"></div>
-    <button id="addBtn">+</button>
+    
+    <div class="footer">
+      <button id="addBtn">+ Add New Prompt</button>
+    </div>
+    
     <script src="popup.js"></script>
   </body>
 </html>

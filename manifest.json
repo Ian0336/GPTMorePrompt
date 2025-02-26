@@ -1,7 +1,7 @@
 {
     "name": "GPTMorePrompt",
     "description": "This extension will add dropdowns to the GPT prompt to allow you to select ",
-    "version": "1.0",
+    "version": "2.0",
     "permissions": [
       "activeTab"
 

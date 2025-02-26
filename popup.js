@@ -1,70 +1,119 @@
-var main = document.getElementById("main");
-var addBtn = document.getElementById("addBtn");
-var promptOptions = [];
-/* localStorage.setItem("promptOptions", ""); */
-if (localStorage.getItem("promptOptions")) {
-  var tmp = localStorage.getItem("promptOptions").split(",");
-  for (var i = 0; i < tmp.length; i++) {
-    if (tmp[i] != "") promptOptions.push(tmp[i]);
-  }
-}
+document.addEventListener('DOMContentLoaded', function() {
+  var main = document.getElementById("main");
+  var addBtn = document.getElementById("addBtn");
+  var promptOptions = [];
 
-addBtn.addEventListener("click", function () {
-  promptOptions.push("new Prompt");
-
-  changeDropdownContent();
-});
-//add inputs to main
-
-for (var i = 0; i < promptOptions.length; i++) {
-  var input = document.createElement("input");
-  input.type = "text";
-  input.id = i;
-  input.className = "input";
-  input.value = promptOptions[i];
-  input.onchange = inputChange;
-  main.appendChild(input);
-}
-
-function inputChange(e) {
-  var value = e.target.value;
-  var inputID = parseInt(e.target.id);
-
-  if (value === "") {
-    // delete input
-    promptOptions[inputID] = undefined;
-
-    main.removeChild(e.target);
-  } else {
-    //check if value is unique
-
-    promptOptions[inputID] = value;
-  }
-  console.log(promptOptions);
-  setLocalStorage();
-}
-function changeDropdownContent() {
-  //delete old options
-  var input = document.createElement("input");
-  input.type = "text";
-  input.id = document.getElementsByClassName("input").length;
-  input.className = "input";
-  input.value = "new Prompt";
-  input.onchange = inputChange;
-  main.appendChild(input);
-  setLocalStorage();
-}
-function setLocalStorage() {
-  var tmp = "";
-  for (var i = 0; i < promptOptions.toString().length; i++) {
-    if (promptOptions[i] != undefined) {
-      tmp += promptOptions[i];
-      if (i != promptOptions.toString().length - 1) tmp += ",";
+  // Load saved prompts
+  if (localStorage.getItem("promptOptions")) {
+    var tmp = localStorage.getItem("promptOptions").split(",");
+    for (var i = 0; i < tmp.length; i++) {
+      if (tmp[i] != "") promptOptions.push(tmp[i]);
     }
   }
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
+
+  // Display empty state message if no prompts exist
+  function checkEmptyState() {
+    if (promptOptions.length === 0) {
+      const emptyState = document.createElement("div");
+      emptyState.className = "empty-state";
+      emptyState.textContent = "No prompts yet. Add your first prompt!";
+      main.appendChild(emptyState);
+    } else {
+      const existingEmptyState = main.querySelector(".empty-state");
+      if (existingEmptyState) {
+        main.removeChild(existingEmptyState);
+      }
+    }
+  }
+
+  // Add new prompt when button is clicked
+  addBtn.addEventListener("click", function () {
+    promptOptions.push("New prompt");
+    renderPrompts();
+    setLocalStorage();
   });
-  console.log(tmp);
-  localStorage.setItem("promptOptions", tmp);
-}
+
+  // Handle input field changes
+  function handleInputChange(e) {
+    const value = e.target.value;
+    const inputID = parseInt(e.target.dataset.index);
+
+    if (value.trim() === "") {
+      if (confirm("Remove this prompt?")) {
+        promptOptions.splice(inputID, 1);
+        renderPrompts();
+        setLocalStorage();
+      } else {
+        // Reset to previous value if user cancels deletion
+        e.target.value = promptOptions[inputID];
+      }
+    } else {
+      promptOptions[inputID] = value;
+      setLocalStorage();
+    }
+  }
+
+  // Handle delete button clicks
+  function handleDeleteClick(index) {
+    promptOptions.splice(index, 1);
+    renderPrompts();
+    setLocalStorage();
+  }
+
+  // Render all prompts
+  function renderPrompts() {
+    // Clear existing content
+    main.innerHTML = '';
+    
+    // Add each prompt as an input field
+    for (let i = 0; i < promptOptions.length; i++) {
+      const promptItem = document.createElement("div");
+      promptItem.className = "prompt-item";
+      
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "input";
+      input.value = promptOptions[i];
+      input.dataset.index = i;
+      input.addEventListener('change', handleInputChange);
+      
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "delete-btn";
+      deleteBtn.innerHTML = "×";
+      deleteBtn.title = "Delete prompt";
+      deleteBtn.addEventListener('click', () => handleDeleteClick(i));
+      
+      promptItem.appendChild(input);
+      promptItem.appendChild(deleteBtn);
+      main.appendChild(promptItem);
+    }
+    
+    checkEmptyState();
+  }
+
+  // Save prompts to localStorage and send to content script using the original method
+  function setLocalStorage() {
+    var tmp = "";
+    for (var i = 0; i < promptOptions.toString().length; i++) {
+      if (promptOptions[i] != undefined && i != 0) {
+        tmp += promptOptions[i];
+        if (i != promptOptions.toString().length - 1) tmp += ",";
+      }
+    }
+    
+    // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    //   if (tabs[0] && tabs[0].id) {
+    //     chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
+    //   }
+    // });
+    
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
+    });
+    console.log(tmp);
+    
+  }
+
+  // Initial render
+  renderPrompts();
+});

@@ -194,7 +194,6 @@ var observer = new MutationObserver(function (mutations) {
     const newTextarea = document.getElementById("prompt-textarea");
     if (newTextarea && newTextarea !== textarea) {
       textarea = newTextarea;
-      setupSubmissionHandlers(); // Re-setup event handlers when textarea changes
     }
 
     createSelectButton();
@@ -212,7 +211,9 @@ function changeTextarea() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(request);
   if (request.options) {
+    console.log(request.options);
     options = ["No prompt"];
     var tmp = request.options;
     for (var i = 0; i < tmp.length; i++) {
