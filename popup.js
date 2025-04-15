@@ -81,25 +81,24 @@ document.addEventListener('DOMContentLoaded', function() {
     checkEmptyState();
   }
 
-  // Save prompts to localStorage and send to content script using the original method
+  // Save prompts to localStorage and send to content script
   function setLocalStorage() {
     var tmp = "";
-    for (var i = 0; i < promptOptions.toString().length; i++) {
+    for (var i = 0; i < promptOptions.length; i++) {
       if (promptOptions[i] != undefined) {
         tmp += promptOptions[i];
-        if (i != promptOptions.toString().length - 1) tmp += ",";
+        if (i != promptOptions.length - 1) tmp += ",";
       }
     }
     
-    // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    //   if (tabs[0] && tabs[0].id) {
-    //     chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
-    //   }
-    // });
-    
+    // Send to content script using Manifest V3 compatible approach
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions });
+      if (tabs[0] && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions })
+          .catch(error => console.log("Error sending message to content script:", error));
+      }
     });
+    
     console.log(tmp);
     localStorage.setItem("promptOptions", tmp);
   }

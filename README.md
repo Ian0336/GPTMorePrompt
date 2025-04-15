@@ -32,12 +32,14 @@ GPTMorePrompt is a Chrome extension that enhances your ChatGPT experience by all
 ### Using Prompts in ChatGPT
 
 1. Navigate to [ChatGPT](https://chatgpt.com/)
-2. You'll see a "Prompts" button below the ChatGPT input area
-3. Click this button to open a modal with your saved prompts
-4. Select a prompt from the list to set it as your active prompt
-5. The button will change to show the selected prompt
-6. Click the "↑" button that appears next to your selected prompt to insert it into the ChatGPT textarea and will send the message
-7. To clear your selection, choose "No prompt" from the modal
+2. Look for a toggle button on the right side of your screen (about one-third down from the top)
+3. Click the toggle button to open the prompt sidebar
+4. Click the "Prompts" button in the sidebar to open a modal with your saved prompts
+5. Select a prompt from the list to set it as your active prompt
+6. The button will change to show the selected prompt
+7. Click the "↑" button that appears next to your selected prompt to insert it into the ChatGPT textarea
+8. You can hide the sidebar by clicking the toggle button again
+9. To clear your selection, choose "No prompt" from the modal
 
 ## Screenshots
 
