@@ -4,22 +4,21 @@
     "version": "2.0",
     "permissions": [
       "activeTab"
-
     ],
-    "browser_action": {
-
+    "action": {
       "default_popup": "popup.html"
     },
     "content_scripts": [
       {
-        
-        "matches": ["*://chatgpt.com/*"],
-        "js" : ["content.js"],
-        "css" : ["content.css"]
+        "matches": ["*://chatgpt.com/*", "*://chat.openai.com/*"],
+        "js": ["content.js"],
+        "css": ["content.css"]
       }
-  
-    ], 
-    "manifest_version": 2
-    
-  }
+    ],
+    "host_permissions": [
+      "*://chatgpt.com/*",
+      "*://chat.openai.com/*"
+    ],
+    "manifest_version": 3
+}
   
