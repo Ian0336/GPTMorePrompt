@@ -3,13 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var addBtn = document.getElementById("addBtn");
   var promptOptions = [];
 
-  // Load saved prompts
-  if (localStorage.getItem("promptOptions")) {
-    var tmp = localStorage.getItem("promptOptions").split(",");
-    for (var i = 0; i < tmp.length; i++) {
-      if (tmp[i] != "") promptOptions.push(tmp[i]);
+  // Load saved prompts from chrome.storage
+  chrome.storage.local.get(['promptOptions'], function(result) {
+    if (result.promptOptions && Array.isArray(result.promptOptions)) {
+      promptOptions = result.promptOptions.filter(opt => opt != "");
     }
-  }
+    renderPrompts();
+  });
 
   // Display empty state message if no prompts exist
   function checkEmptyState() {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   addBtn.addEventListener("click", function () {
     promptOptions.push("New prompt");
     renderPrompts();
-    setLocalStorage();
+    saveToStorage();
   });
 
   // Handle input field changes
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("change here " + value);
 
     promptOptions[inputID] = value;
-    setLocalStorage();
+    saveToStorage();
   }
 
   // Handle delete button clicks
   function handleDeleteClick(index) {
     promptOptions.splice(index, 1);
     renderPrompts();
-    setLocalStorage();
+    saveToStorage();
   }
 
   // Render all prompts
@@ -81,28 +81,10 @@ document.addEventListener('DOMContentLoaded', function() {
     checkEmptyState();
   }
 
-  // Save prompts to localStorage and send to content script
-  function setLocalStorage() {
-    var tmp = "";
-    for (var i = 0; i < promptOptions.length; i++) {
-      if (promptOptions[i] != undefined) {
-        tmp += promptOptions[i];
-        if (i != promptOptions.length - 1) tmp += ",";
-      }
-    }
-    
-    // Send to content script using Manifest V3 compatible approach
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      if (tabs[0] && tabs[0].id) {
-        chrome.tabs.sendMessage(tabs[0].id, { options: promptOptions })
-          .catch(error => console.log("Error sending message to content script:", error));
-      }
+  // Save prompts to chrome.storage (content scripts can read this directly)
+  function saveToStorage() {
+    chrome.storage.local.set({ promptOptions: promptOptions }, function() {
+      console.log("Options saved to chrome.storage:", promptOptions);
     });
-    
-    console.log(tmp);
-    localStorage.setItem("promptOptions", tmp);
   }
-
-  // Initial render
-  renderPrompts();
 });

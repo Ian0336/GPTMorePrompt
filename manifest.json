@@ -3,7 +3,8 @@
     "description": "This extension will add dropdowns to the GPT prompt to allow you to select ",
     "version": "2.0",
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "storage"
     ],
     "action": {
       "default_icon": "icon.png",

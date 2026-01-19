@@ -179,12 +179,13 @@ function addStyles() {
 }
 
 function setup() {
-  if (localStorage.getItem("promptOptions")) {
-    var tmp = localStorage.getItem("promptOptions").split(",");
-    for (var i = 0; i < tmp.length; i++) {
-      if (tmp[i] != "") options.push(tmp[i]);
+  // Load options from chrome.storage (shared with popup)
+  chrome.storage.local.get(['promptOptions'], function(result) {
+    if (result.promptOptions && Array.isArray(result.promptOptions)) {
+      options = result.promptOptions.filter(opt => opt != "");
+      console.log("Loaded options from chrome.storage:", options);
     }
-  }
+  });
   
   textarea = getTextarea();
   
@@ -304,16 +305,6 @@ function showOptionsModal() {
   });
 }
 
-function setLocalStorage() {
-  var tmp = "";
-  for (var i = 0; i < options.length; i++) {
-    if (options[i] != undefined) {
-      tmp += options[i];
-      if (i != options.length - 1) tmp += ",";
-    }
-  }
-  localStorage.setItem("promptOptions", tmp);
-}
 
 var observer = new MutationObserver(function (mutations) {
   mutations.forEach(function (mutation) {
@@ -383,17 +374,12 @@ function changeTextarea(selectedPrompt) {
   textarea.focus();
 }
 
-// Update message listener for Manifest V3 compatibility
+// Update message listener for Manifest V3 compatibility (for real-time updates from popup)
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request);
   if (request.options) {
-    console.log(request.options);
-    options = [];
-    var tmp = request.options;
-    for (var i = 0; i < tmp.length; i++) {
-      if (tmp[i] != "" && tmp[i] != null) options.push(tmp[i]);
-    }
-    setLocalStorage();
+    console.log("Received options from popup:", request.options);
+    options = request.options.filter(opt => opt != "" && opt != null);
     // Send response to indicate successful reception
     sendResponse({status: "Options updated successfully"});
     return true; // Required for async sendResponse in Manifest V3
