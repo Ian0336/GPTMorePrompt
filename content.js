@@ -26,158 +26,153 @@ function checkType() {
 function addStyles() {
   const styleElement = document.createElement('style');
   styleElement.textContent = `
-    .prompt-container {
-      position: fixed;
-      top: 50%;
-      right: 16px;
-      transform: translateY(-50%);
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: inherit;
+    #prompt-container.prompt-container {
+      all: initial !important;
+      position: fixed !important;
+      top: 50% !important;
+      right: 16px !important;
+      transform: translateY(-50%) !important;
+      z-index: 2147483647 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+      box-sizing: border-box !important;
     }
     
-    .prompt-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: inherit;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: background-color 0.2s;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e5e7eb;
-      cursor: pointer;
+    #prompt-select-button.prompt-button {
+      all: initial !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      color: #333333 !important;
+      background-color: transparent !important;
+      padding: 8px 12px !important;
+      border-radius: 8px !important;
+      transition: background-color 0.2s !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid #e5e7eb !important;
+      cursor: pointer !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 16px !important;
+      line-height: 1 !important;
+      box-sizing: border-box !important;
     }
     
-    .prompt-button:hover {
-      background-color: #f3f4f6;
+    #prompt-select-button.prompt-button:hover {
+      scale: 1.05 !important;
     }
     
-    .dark .prompt-button:hover {
-      background-color: #374151;
+    #options-modal.modal-overlay {
+      all: initial !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 2147483647 !important;
+      background-color: rgba(0, 0, 0, 0.5) !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+      box-sizing: border-box !important;
     }
     
-    .dark .prompt-button {
-      border-color: #4b5563;
+    #options-modal .modal-content {
+      all: initial !important;
+      display: block !important;
+      background-color: #2d2d2d !important;
+      border-radius: 12px !important;
+      padding: 20px !important;
+      max-width: 400px !important;
+      width: 90% !important;
+      max-height: 500px !important;
+      overflow-y: auto !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+      box-sizing: border-box !important;
+      color: #e5e5e5 !important;
     }
     
-    .prompt-button-selected {
-      border-width: 2px;
-      border-color: white;
-      font-weight: 500;
-      color: #333333;
+    #options-modal .modal-header {
+      all: initial !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 16px !important;
+      padding-bottom: 12px !important;
+      border-bottom: 1px solid #404040 !important;
+      box-sizing: border-box !important;
     }
     
-    .dark .prompt-button-selected {
-      border-color: #374151;
-      color: #e5e5e5;
+    #options-modal .modal-title {
+      all: initial !important;
+      display: block !important;
+      font-size: 18px !important;
+      font-weight: 600 !important;
+      color: #e5e5e5 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
     
-    .insert-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: inherit;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: background-color 0.2s;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-      cursor: pointer;
+    #options-modal .close-button {
+      all: initial !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 6px !important;
+      color: #a0a0a0 !important;
+      background-color: transparent !important;
+      border: none !important;
+      cursor: pointer !important;
+      font-size: 18px !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      transition: background-color 0.2s !important;
     }
     
-    .insert-button:hover {
-      background-color: #f3f4f6;
+    #options-modal .close-button:hover {
+      background-color: #404040 !important;
+      color: #ffffff !important;
     }
     
-    .dark .insert-button:hover {
-      background-color: #374151;
+    #options-modal .options-list {
+      all: initial !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+      box-sizing: border-box !important;
     }
     
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      background-color: rgba(0, 0, 0, 0.5);
+    #options-modal .option {
+      all: initial !important;
+      display: block !important;
+      padding: 12px 14px !important;
+      border-radius: 8px !important;
+      cursor: pointer !important;
+      color: #d0d0d0 !important;
+      background-color: #3d3d3d !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 14px !important;
+      line-height: 1.4 !important;
+      transition: background-color 0.15s, transform 0.1s !important;
+      border: 1px solid #505050 !important;
+      box-sizing: border-box !important;
     }
     
-    .modal-content {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      max-width: 28rem;
-      width: 100%;
-      max-height: 24rem;
-      overflow-y: auto;
-    }
-    
-    .dark .modal-content {
-      background-color: #1f2937;
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    
-    .modal-title {
-      font-size: 1.125rem;
-      font-weight: 500;
-      color: #111827;
-    }
-    
-    .dark .modal-title {
-      color: white;
-    }
-    
-    .close-button {
-      color: #9ca3af;
-    }
-    
-    .close-button:hover {
-      color: #6b7280;
-    }
-    
-    .close-button:focus {
-      outline: none;
-    }
-    
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .option {
-      padding: 8px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .option:hover {
-      background-color: #f3f4f6;
-    }
-    
-    .dark .option:hover {
-      background-color: #374151;
-    }
-    
-    .option-selected {
-      font-weight: 500;
-    }
-    
-    .option-checkmark {
-      color: #333333;
-    }
-    
-    .dark .option-checkmark {
-      color: #e5e5e5;
+    #options-modal .option:hover {
+      background-color: #505050 !important;
+      transform: translateX(2px) !important;
     }
   `;
   document.head.appendChild(styleElement);
