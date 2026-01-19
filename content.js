@@ -5,11 +5,22 @@ var textarea;
 var promptContainer;
 var selectButton;
 var options = [];
+var type = "";
+
 
 function mainFunction() {
+  checkType();
   addStyles();
   setup();
   createSelectButton();
+}
+
+function checkType() {
+  if (document.URL.includes("chatgpt.com")) {
+    type = "chatGPT";
+  } else if (document.URL.includes("gemini.google.com")) {
+    type = "gemini";
+  }
 }
 
 function addStyles() {
@@ -180,7 +191,7 @@ function setup() {
     }
   }
   
-  textarea = document.getElementById("prompt-textarea");
+  textarea = getTextarea();
   
   observer.observe(document.body, {
     childList: true,
@@ -188,6 +199,16 @@ function setup() {
     attributes: false,
     characterData: false,
   });
+}
+
+function getTextarea() {
+  if (type === "chatGPT") {
+    return document.getElementById("prompt-textarea");
+  } else if (type === "gemini") {
+    // Gemini uses a contenteditable div with class "ql-editor"
+    return document.querySelector('.ql-editor.textarea');
+  }
+  return null;
 }
 
 function createSelectButton() {
@@ -263,14 +284,9 @@ function showOptionsModal() {
       // Insert the prompt immediately
       changeTextarea(selectedPrompt);
       
-      // Find and submit the form
-      
+      // Find and submit based on type
       setTimeout(() => {
-        const form = textarea.closest('form');
-        if (form) {
-          console.log("form", form);
-          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-        }
+        submitPrompt();
       }, 100);
       modal.remove();
     };
@@ -306,8 +322,8 @@ function setLocalStorage() {
 
 var observer = new MutationObserver(function (mutations) {
   mutations.forEach(function (mutation) {
-    // Check for textarea changes
-    const newTextarea = document.getElementById("prompt-textarea");
+    // Check for textarea changes based on type
+    const newTextarea = getTextarea();
     if (newTextarea && newTextarea !== textarea) {
       textarea = newTextarea;
     }
@@ -316,14 +332,51 @@ var observer = new MutationObserver(function (mutations) {
   });
 });
 
+function submitPrompt() {
+  if (type === "chatGPT") {
+    // ChatGPT: submit the form
+    const form = textarea.closest('form');
+    if (form) {
+      console.log("ChatGPT form", form);
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    }
+  } else if (type === "gemini") {
+    // Gemini: click the send button
+    const sendButton = document.querySelector('button.send-button');
+    if (sendButton) {
+      console.log("Gemini send button", sendButton);
+      sendButton.click();
+    }
+  }
+}
+
 function changeTextarea(selectedPrompt) {
-  if (!selectedPrompt || !textarea) return;
+  // Re-fetch textarea in case it changed
+  textarea = getTextarea();
+  if (!selectedPrompt || !textarea) {
+    console.log("No textarea found or no prompt", { type, textarea, selectedPrompt });
+    return;
+  }
   
-  if (textarea.children && textarea.children.length > 0 && !textarea.children[textarea.children.length - 1].innerText.endsWith(selectedPrompt)) {
+  if (type === "gemini") {
+    // Gemini uses contenteditable div
+    // Clear existing content and add new prompt
+    const existingText = textarea.innerText.trim();
+    if (!existingText.endsWith(selectedPrompt)) {
+      let newArea = document.createElement("p");
+      newArea.innerText = selectedPrompt;
+      textarea.appendChild(newArea);
+      console.log("Gemini: added prompt", newArea);
+      
+      // Trigger input event to let Gemini know content changed
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  } else if (textarea.children && textarea.children.length > 0 && !textarea.children[textarea.children.length - 1].innerText.endsWith(selectedPrompt)) {
+    // ChatGPT rich text editor
     let newArea = document.createElement("p");
     newArea.innerText = selectedPrompt;
     textarea.appendChild(newArea);
-    console.log("newArea", newArea);
+    console.log("ChatGPT: added prompt", newArea);
   } else if (textarea.value !== undefined) {
     // Handle plain textareas (not rich text)
     if (!textarea.value.endsWith(selectedPrompt)) {
