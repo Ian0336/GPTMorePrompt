@@ -374,14 +374,19 @@ function changeTextarea(selectedPrompt) {
   textarea.focus();
 }
 
-// Update message listener for Manifest V3 compatibility (for real-time updates from popup)
+// Message listener for real-time updates from popup
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request);
-  if (request.options) {
-    console.log("Received options from popup:", request.options);
-    options = request.options.filter(opt => opt != "" && opt != null);
-    // Send response to indicate successful reception
-    sendResponse({status: "Options updated successfully"});
-    return true; // Required for async sendResponse in Manifest V3
+  
+  // Handle reload request from popup
+  if (request.action === "reloadOptions") {
+    chrome.storage.local.get(['promptOptions'], function(result) {
+      if (result.promptOptions && Array.isArray(result.promptOptions)) {
+        options = result.promptOptions.filter(opt => opt != "");
+        console.log("Reloaded options from chrome.storage:", options);
+      }
+    });
+    sendResponse({status: "Reloading options"});
+    return true;
   }
 });

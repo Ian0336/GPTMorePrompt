@@ -81,10 +81,28 @@ document.addEventListener('DOMContentLoaded', function() {
     checkEmptyState();
   }
 
-  // Save prompts to chrome.storage (content scripts can read this directly)
+  // Save prompts to chrome.storage and notify content scripts to reload
   function saveToStorage() {
     chrome.storage.local.set({ promptOptions: promptOptions }, function() {
       console.log("Options saved to chrome.storage:", promptOptions);
+      // Notify all matching tabs to reload options
+      notifyContentScripts();
+    });
+  }
+
+  // Notify all ChatGPT/Gemini tabs to reload options from storage
+  function notifyContentScripts() {
+    chrome.tabs.query({}, function(tabs) {
+      tabs.forEach(tab => {
+        if (tab.id && tab.url && (
+          tab.url.includes("chatgpt.com") || 
+          tab.url.includes("chat.openai.com") ||
+          tab.url.includes("gemini.google.com")
+        )) {
+          chrome.tabs.sendMessage(tab.id, { action: "reloadOptions" })
+            .catch(error => console.log("Tab " + tab.id + " not ready:", error));
+        }
+      });
     });
   }
 });
